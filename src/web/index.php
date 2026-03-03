@@ -53,6 +53,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Obtener donaciones
 $donaciones = $pdo->query("SELECT * FROM donaciones ORDER BY fecha_donacion DESC")->fetchAll();
 
+// Obtener alumnos
+$alumnos = [];
+try {
+    $alumnos = $pdo->query("SELECT * FROM alumnos")->fetchAll();
+}
+catch (\PDOException $e) {
+// Si la tabla no existe aún, evitamos un error fatal en la vista
+}
+
 // Leer reporte  por Python
 $reporte = "Cargando reporte...";
 if (file_exists('reports/reporte.txt')) {
@@ -197,6 +206,19 @@ if (file_exists('reports/reporte.txt')) {
         <header>
             <h1 style="color: white;">Donaciones a la biblioteca de la Universidad</h1>
         </header>
+
+        <!-- Perfiles de Alumnos -->
+        <?php foreach ($alumnos as $alumno): ?>
+        <div class="profile-card">
+            <img src="<?php echo htmlspecialchars($alumno['foto']); ?>" alt="Foto de <?php echo htmlspecialchars($alumno['nombre']); ?>" class="profile-img">
+            <div>
+                <h2 style="color: white; margin-top: 0;"><?php echo htmlspecialchars($alumno['nombre']); ?></h2>
+                <p style="color: #e2e8f0; margin-bottom: 0.5rem;"><strong>Habilidades:</strong> <?php echo htmlspecialchars($alumno['habilidades']); ?></p>
+                <p style="color: #cbd5e1; margin-top: 0;"><?php echo nl2br(htmlspecialchars($alumno['biografia'])); ?></p>
+            </div>
+        </div>
+        <?php
+endforeach; ?>
 
         <div class="grid" style="display:grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
             <!-- Gestión de Donaciones -->
