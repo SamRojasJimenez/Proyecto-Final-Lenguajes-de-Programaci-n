@@ -59,7 +59,7 @@ try {
     $alumnos = $pdo->query("SELECT * FROM alumnos")->fetchAll();
 }
 catch (\PDOException $e) {
-// Si la tabla no existe aún, evitamos un error fatal en la vista
+
 }
 
 // Leer reporte  por Python
